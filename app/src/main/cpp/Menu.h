@@ -1032,192 +1032,189 @@ static int tab = 0;
 
 namespace Menu
 {
-    char text_buffer[256] = "";
-    bool authenticated = false, addmoney;
-    float amount;
-    ImVec4 color = ImVec4(1, 1, 1, 1);
-    void DrawMenu()
-    {
-        static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    void DrawMenu() {
+        Begin(OBFUSCATE("Mystik Mods - Critical Ops v1.39.0.f2266"), &cops::menuOpen,
+              ImGuiWindowFlags_NoScrollbar);
         {
-            Begin(OBFUSCATE("Mystik Mods - Critical Ops v1.39.0.f2266"), &cops::menuOpen,
-                  ImGuiWindowFlags_NoScrollbar);
-            {
-                static float original_y = ImGui::GetCursorPos().y;
-                if (ImGui::BeginChild("Sidebar", ImVec2(200.f, ImGui::GetWindowHeight()))) {
-                    if (Test::SideBtn("ESP", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 0;
-                    if (Test::SideBtn("CHAMS", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 1;
-                    if (Test::SideBtn("AIMBOT", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 2;
-                    if (Test::SideBtn("VISUALS", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 3;
-                    if (Test::SideBtn("WEAPON", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 4;
-                    if (Test::SideBtn("MISC", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 5;
+            static float original_y = ImGui::GetCursorPos().y;
+            if (ImGui::BeginChild("Sidebar", ImVec2(200.f, ImGui::GetWindowHeight()))) {
+                if (Test::SideBtn("ESP", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 0;
+                if (Test::SideBtn("CHAMS", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 1;
+                if (Test::SideBtn("AIMBOT", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 2;
+                if (Test::SideBtn("VISUALS", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 3;
+                if (Test::SideBtn("WEAPON", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 4;
+                if (Test::SideBtn("MISC", ImVec2(ImGui::GetWindowWidth(), 80.f))) tab = 5;
 
-                }
-                ImGui::EndChild();
-                ImGui::SetCursorPos(ImVec2(310.f, original_y));
-                if (ImGui::BeginChild("DataContent", ImVec2(0.f, 0.f))) {
-                    switch (tab) {
-                        case 0:
-                            Test::Checkbox(OBFUSCATE("Enable ESP"), &cops::configs::esp::enabled);
-                            Test::Checkbox(OBFUSCATE("User Names"), &cops::configs::esp::usernames);
-                            Test::Checkbox(OBFUSCATE("Snaplines (TOP)"),
-                                           &cops::configs::esp::linesTop);
-                            Test::Checkbox(OBFUSCATE("Snaplines (BOTTOM)"),
-                                           &cops::configs::esp::linesBottom);
-                            Test::Checkbox(OBFUSCATE("2D Boxes"), &cops::configs::esp::boxes);
-                            Test::Checkbox(OBFUSCATE("Outlined 2D Boxes"),
-                                           &cops::configs::esp::outlined_boxes);
-                            Test::Checkbox(OBFUSCATE("Filled 2D Boxes"),
-                                           &cops::configs::esp::filled_boxes);
-                            Test::Checkbox(OBFUSCATE("Health Bar"), &cops::configs::esp::healthbar);
-                            Test::ColorPicker(OBFUSCATE("Color"), cops::configs::esp::color);
-                            break;
-                        case 1:
-                            PushID(69);
-                            Test::Checkbox(OBFUSCATE("Chams"), &cops::configs::chams::enabled);
-                            PopID();
-                            Test::Checkbox(OBFUSCATE("Shading"), &cops::configs::chams::shading);
-                            Test::Checkbox(OBFUSCATE("Wireframe"),
-                                           &cops::configs::chams::wireframe);
-                            Test::Checkbox(OBFUSCATE("Outline"), &cops::configs::chams::outline);
-                            Test::Checkbox(OBFUSCATE("Glow"), &cops::configs::chams::glow);
-                            Test::Checkbox(OBFUSCATE("Rainbow"), &cops::configs::chams::rainbow);
-                            PushID(420);
-                            Test::ColorPicker(OBFUSCATE("Color"), cops::configs::chams::color);
-                            PopID();
-                            Test::SliderFloat(OBFUSCATE("Width"), &cops::configs::chams::width, 0.f,
-                                              10.f);
-                            break;
-                        case 2:
-                            Test::Checkbox(OBFUSCATE("Enable Aimbot"),
-                                           &cops::configs::aimbot::enabled);
-                            Test::Checkbox(OBFUSCATE("Silent Aimbot"),
-                                           &cops::configs::aimbot::silent);
-                            Test::Checkbox(OBFUSCATE("FOV Check"),
-                                           &cops::configs::aimbot::fovCheck);
-                            Test::SliderFloat(OBFUSCATE("FOV Value"),
-                                              &cops::configs::aimbot::fovValue, 0.f, 360.f);
-                            Test::Checkbox(OBFUSCATE("FOV Circle"),
-                                           &cops::configs::aimbot::fovCircle);
-
-                            // Inside your main loop or ImGui rendering function
-                            Test::Combo(OBFUSCATE("Body Part"), &selectedItemIndex, comboItems,
-                                        IM_ARRAYSIZE(comboItems));
-
-                            // You can use the selectedItemIndex variable to determine which item is selected
-                            switch (selectedItemIndex) {
-                                case 0:
-                                    cops::configs::aimbot::aimBone = 10;
-                                    break;
-                                case 1:
-                                    cops::configs::aimbot::aimBone = 4;
-                                    break;
-                                case 2:
-                                    cops::configs::aimbot::aimBone = 5;
-                                    break;
-                                default:
-                                    break;
-                            }
-                            Test::Checkbox(OBFUSCATE("Red Dot"), &cops::configs::aimbot::redDot);
-                            Test::Checkbox(OBFUSCATE("Visible Only"),
-                                           &cops::configs::aimbot::visCheck);
-                            Test::Checkbox(OBFUSCATE("On Shoot"), &cops::configs::aimbot::onShoot);
-                            Test::Checkbox(OBFUSCATE("Enable Smoothness"),
-                                           &cops::configs::aimbot::aimSmooth);
-                            Test::SliderFloat(OBFUSCATE("Smoothness"),
-                                              &cops::configs::aimbot::smoothAmount, 1.f,
-                                              100.f);
-                            break;
-                        case 3:
-                            Test::Checkbox(OBFUSCATE("Spectator Radar"), &cops::configs::visuals::specradar);
-                            Test::Checkbox(OBFUSCATE("Radar"), &cops::configs::visuals::radar);
-                            Test::Checkbox(OBFUSCATE("Team Radar"),
-                                           &cops::configs::visuals::teamRadar);
-                            Test::Checkbox(OBFUSCATE("Wide Putin"),
-                                           &cops::configs::visuals::widePutin);
-                            Test::SliderFloat(OBFUSCATE("Putin X"), &cops::configs::visuals::putinX,
-                                              0.f, 20.f);
-                            Test::SliderFloat(OBFUSCATE("Putin Y"), &cops::configs::visuals::putinY,
-                                              0.f, 20.f);
-                            Test::SliderFloat(OBFUSCATE("Putin Z"), &cops::configs::visuals::putinZ,
-                                              0.f, 20.f);
-                            Test::Checkbox(OBFUSCATE("No Flash"), &cops::configs::visuals::noFlash);
-                            Test::Checkbox(OBFUSCATE("No Smoke"), &cops::configs::visuals::noSmoke);
-                            Test::Checkbox(OBFUSCATE("No Sniper Blur"),
-                                           &cops::configs::visuals::noSniperBlur);
-                            Test::Checkbox(OBFUSCATE("View Model Changer"),
-                                           &cops::configs::visuals::viewModel);
-                            Test::SliderFloat(OBFUSCATE("View Model X"),
-                                              &cops::configs::visuals::viewModelX,
-                                              -1.f, 1.f);
-                            Test::SliderFloat(OBFUSCATE("View Model Y"),
-                                              &cops::configs::visuals::viewModelY,
-                                              -1.f, 1.f);
-                            Test::SliderFloat(OBFUSCATE("View Model Z"),
-                                              &cops::configs::visuals::viewModelZ,
-                                              -1.f, 1.f);
-                            break;
-                        case 4:
-                            Test::Checkbox(OBFUSCATE("Always Crosshair"),
-                                           &cops::configs::weapon::alwaysCrosshair);
-                            Test::Checkbox(OBFUSCATE("No Spread"),
-                                           &cops::configs::weapon::noSpread);
-                            Test::Checkbox(OBFUSCATE("No Recoil"),
-                                           &cops::configs::weapon::noRecoil);
-                            Test::Checkbox(OBFUSCATE("Wall Shoot"),
-                                           &cops::configs::weapon::wallShot);
-                            Test::Checkbox(OBFUSCATE("Fire Rate"),
-                                           &cops::configs::weapon::fireRateActive);
-                            Test::SliderFloat(OBFUSCATE("Fire Rate Modifier"),
-                                              &cops::configs::weapon::fireRate,
-                                              0.f,
-                                              10.f);
-                            Test::Checkbox(OBFUSCATE("Head Rain"),
-                                           &cops::configs::weapon::headRain);
-                            Test::Checkbox(OBFUSCATE("No Aimpunch"),
-                                           &cops::configs::weapon::noAimpunch);
-                            Test::Checkbox(OBFUSCATE("No Dryfire"),
-                                           &cops::configs::weapon::noDryfire);
-                            Test::Checkbox(OBFUSCATE("Magic Melee"),
-                                           &cops::configs::weapon::magicMelee);
-                            Test::Checkbox(OBFUSCATE("Instant Equip Gun"),
-                                           &cops::configs::weapon::instantEquipGun);
-                            break;
-                        case 5:
-                            Test::Checkbox(OBFUSCATE("Speed"),
-                                           &cops::configs::miscellaneous::speed);
-                            Test::Checkbox(OBFUSCATE("No Clip"),
-                                           &cops::configs::miscellaneous::noclip);
-                            Test::SliderFloat(OBFUSCATE("Speed Value"),
-                                              &cops::configs::miscellaneous::speedValue, 0.f,
-                                              30.f);
-                            Test::Checkbox(OBFUSCATE("Bomb Timer"),
-                                           &cops::configs::miscellaneous::bombTimer);
-                            Test::Checkbox(OBFUSCATE("Jump Height"),
-                                           &cops::configs::miscellaneous::jumpHeight);
-                            Test::SliderFloat(OBFUSCATE("Jump Height Value"),
-                                              &cops::configs::miscellaneous::jumpVal,
-                                              0.f, 30.f);
-                            Test::Checkbox(OBFUSCATE("Bots Don't Shoot"),
-                                           &cops::configs::miscellaneous::botsNoShoot);
-                            Test::Checkbox(OBFUSCATE("Fly"), &cops::configs::miscellaneous::fly);
-                            Test::SliderFloat(OBFUSCATE("Fly Height"),
-                                              &cops::configs::miscellaneous::flyVal, 1.47f,
-                                              10.f);
-                            Test::Checkbox(OBFUSCATE("Skip Tutorial"),
-                                           &cops::configs::miscellaneous::skipTut);
-                            break;
-                        case 6:
-                            break;
-                        default:
-                            break;
-                    }
-
-                }
-                ImGui::EndChild();
             }
-            End();
+            ImGui::EndChild();
+            ImGui::SetCursorPos(ImVec2(310.f, original_y));
+            if (ImGui::BeginChild("DataContent", ImVec2(0.f, 0.f))) {
+                switch (tab) {
+                    case 0:
+                        Test::Checkbox(OBFUSCATE("Enable ESP"), &cops::configs::esp::enabled);
+                        Test::Checkbox(OBFUSCATE("User Names"), &cops::configs::esp::usernames);
+                        Test::Checkbox(OBFUSCATE("Snaplines (TOP)"),
+                                       &cops::configs::esp::linesTop);
+                        Test::Checkbox(OBFUSCATE("Snaplines (BOTTOM)"),
+                                       &cops::configs::esp::linesBottom);
+                        Test::Checkbox(OBFUSCATE("2D Boxes"), &cops::configs::esp::boxes);
+                        Test::Checkbox(OBFUSCATE("Outlined 2D Boxes"),
+                                       &cops::configs::esp::outlined_boxes);
+                        Test::Checkbox(OBFUSCATE("Filled 2D Boxes"),
+                                       &cops::configs::esp::filled_boxes);
+                        Test::Checkbox(OBFUSCATE("Health Bar"), &cops::configs::esp::healthbar);
+                        Test::ColorPicker(OBFUSCATE("Color"), cops::configs::esp::color);
+                        break;
+                    case 1:
+                        PushID(69);
+                        Test::Checkbox(OBFUSCATE("Chams"), &cops::configs::chams::enabled);
+                        PopID();
+                        Test::Checkbox(OBFUSCATE("Shading"), &cops::configs::chams::shading);
+                        Test::Checkbox(OBFUSCATE("Wireframe"),
+                                       &cops::configs::chams::wireframe);
+                        Test::Checkbox(OBFUSCATE("Outline"), &cops::configs::chams::outline);
+                        Test::Checkbox(OBFUSCATE("Glow"), &cops::configs::chams::glow);
+                        Test::Checkbox(OBFUSCATE("Rainbow"), &cops::configs::chams::rainbow);
+                        PushID(420);
+                        Test::ColorPicker(OBFUSCATE("Color"), cops::configs::chams::color);
+                        PopID();
+                        Test::SliderFloat(OBFUSCATE("Width"), &cops::configs::chams::width, 0.f,
+                                          10.f);
+                        break;
+                    case 2:
+                        Test::Checkbox(OBFUSCATE("Enable Aimbot"),
+                                       &cops::configs::aimbot::enabled);
+                        Test::Checkbox(OBFUSCATE("Silent Aimbot"),
+                                       &cops::configs::aimbot::silent);
+                        Test::Checkbox(OBFUSCATE("FOV Check"),
+                                       &cops::configs::aimbot::fovCheck);
+                        Test::SliderFloat(OBFUSCATE("FOV Value"),
+                                          &cops::configs::aimbot::fovValue, 0.f, 360.f);
+                        Test::Checkbox(OBFUSCATE("FOV Circle"),
+                                       &cops::configs::aimbot::fovCircle);
+
+//                        // Inside your main loop or ImGui rendering function
+//                        Test::Combo(OBFUSCATE("Body Part"), &selectedItemIndex, comboItems,
+//                                    IM_ARRAYSIZE(comboItems));
+//
+//                        // You can use the selectedItemIndex variable to determine which item is selected
+//                        switch (selectedItemIndex) {
+//                            case 0:
+//                                cops::configs::aimbot::aimBone = 10;
+//                                break;
+//                            case 1:
+//                                cops::configs::aimbot::aimBone = 4;
+//                                break;
+//                            case 2:
+//                                cops::configs::aimbot::aimBone = 5;
+//                                break;
+//                            default:
+//                                break;
+//                        }
+                        Test::Checkbox(OBFUSCATE("Red Dot"), &cops::configs::aimbot::redDot);
+                        Test::Checkbox(OBFUSCATE("Visible Only"),
+                                       &cops::configs::aimbot::visCheck);
+                        Test::Checkbox(OBFUSCATE("On Shoot"), &cops::configs::aimbot::onShoot);
+                        Test::Checkbox(OBFUSCATE("Enable Smoothness"),
+                                       &cops::configs::aimbot::aimSmooth);
+                        Test::SliderFloat(OBFUSCATE("Smoothness"),
+                                          &cops::configs::aimbot::smoothAmount, 1.f,
+                                          100.f);
+                        break;
+                    case 3:
+                        Test::Checkbox(OBFUSCATE("Spectator Radar"),
+                                       &cops::configs::visuals::specradar);
+                        Test::Checkbox(OBFUSCATE("Radar"), &cops::configs::visuals::radar);
+                        Test::Checkbox(OBFUSCATE("Team Radar"),
+                                       &cops::configs::visuals::teamRadar);
+                        Test::Checkbox(OBFUSCATE("Wide Putin"),
+                                       &cops::configs::visuals::widePutin);
+                        Test::SliderFloat(OBFUSCATE("Putin X"), &cops::configs::visuals::putinX,
+                                          0.f, 20.f);
+                        Test::SliderFloat(OBFUSCATE("Putin Y"), &cops::configs::visuals::putinY,
+                                          0.f, 20.f);
+                        Test::SliderFloat(OBFUSCATE("Putin Z"), &cops::configs::visuals::putinZ,
+                                          0.f, 20.f);
+                        Test::Checkbox(OBFUSCATE("No Flash"), &cops::configs::visuals::noFlash);
+                        Test::Checkbox(OBFUSCATE("No Smoke"), &cops::configs::visuals::noSmoke);
+                        Test::Checkbox(OBFUSCATE("No Sniper Blur"),
+                                       &cops::configs::visuals::noSniperBlur);
+                        Test::Checkbox(OBFUSCATE("View Model Changer"),
+                                       &cops::configs::visuals::viewModel);
+                        Test::SliderFloat(OBFUSCATE("View Model X"),
+                                          &cops::configs::visuals::viewModelX,
+                                          -1.f, 1.f);
+                        Test::SliderFloat(OBFUSCATE("View Model Y"),
+                                          &cops::configs::visuals::viewModelY,
+                                          -1.f, 1.f);
+                        Test::SliderFloat(OBFUSCATE("View Model Z"),
+                                          &cops::configs::visuals::viewModelZ,
+                                          -1.f, 1.f);
+                        break;
+                    case 4:
+                        Test::Checkbox(OBFUSCATE("Always Crosshair"),
+                                       &cops::configs::weapon::alwaysCrosshair);
+                        Test::Checkbox(OBFUSCATE("No Spread"),
+                                       &cops::configs::weapon::noSpread);
+                        Test::Checkbox(OBFUSCATE("No Recoil"),
+                                       &cops::configs::weapon::noRecoil);
+                        Test::Checkbox(OBFUSCATE("Wall Shoot"),
+                                       &cops::configs::weapon::wallShot);
+                        Test::Checkbox(OBFUSCATE("Fire Rate"),
+                                       &cops::configs::weapon::fireRateActive);
+                        Test::SliderFloat(OBFUSCATE("Fire Rate Modifier"),
+                                          &cops::configs::weapon::fireRate,
+                                          0.f,
+                                          10.f);
+                        Test::Checkbox(OBFUSCATE("Head Rain"),
+                                       &cops::configs::weapon::headRain);
+                        Test::Checkbox(OBFUSCATE("No Aimpunch"),
+                                       &cops::configs::weapon::noAimpunch);
+                        Test::Checkbox(OBFUSCATE("No Dryfire"),
+                                       &cops::configs::weapon::noDryfire);
+                        Test::Checkbox(OBFUSCATE("Magic Melee"),
+                                       &cops::configs::weapon::magicMelee);
+                        Test::Checkbox(OBFUSCATE("Instant Equip Gun"),
+                                       &cops::configs::weapon::instantEquipGun);
+                        break;
+                    case 5:
+                        Test::Checkbox(OBFUSCATE("Speed"),
+                                       &cops::configs::miscellaneous::speed);
+                        Test::Checkbox(OBFUSCATE("No Clip"),
+                                       &cops::configs::miscellaneous::noclip);
+                        Test::SliderFloat(OBFUSCATE("Speed Value"),
+                                          &cops::configs::miscellaneous::speedValue, 0.f,
+                                          30.f);
+                        Test::Checkbox(OBFUSCATE("Bomb Timer"),
+                                       &cops::configs::miscellaneous::bombTimer);
+                        Test::Checkbox(OBFUSCATE("Jump Height"),
+                                       &cops::configs::miscellaneous::jumpHeight);
+                        Test::SliderFloat(OBFUSCATE("Jump Height Value"),
+                                          &cops::configs::miscellaneous::jumpVal,
+                                          0.f, 30.f);
+                        Test::Checkbox(OBFUSCATE("Bots Don't Shoot"),
+                                       &cops::configs::miscellaneous::botsNoShoot);
+                        Test::Checkbox(OBFUSCATE("Fly"), &cops::configs::miscellaneous::fly);
+                        Test::SliderFloat(OBFUSCATE("Fly Height"),
+                                          &cops::configs::miscellaneous::flyVal, 1.47f,
+                                          10.f);
+                        Test::Checkbox(OBFUSCATE("Skip Tutorial"),
+                                       &cops::configs::miscellaneous::skipTut);
+                        break;
+                    case 6:
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            ImGui::EndChild();
         }
+        End();
+        cops::esp::run();
+        cops::hooks::patches();
+        cops::weapon::patches();
+        cops::miscellaneous::patches();
     }
 
 }
