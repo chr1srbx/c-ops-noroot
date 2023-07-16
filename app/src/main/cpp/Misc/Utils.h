@@ -132,8 +132,8 @@ std::string random_string(const int len) {
 }
 
 
-#define PATCH(offset, hex) patchOffset(OBFUSCATE("libil2cpp.so"), string2Offset(OBFUSCATE(offset)), std::string(OBFUSCATE(hex)), true)
-#define hook(offset, newfunc, orig) DobbyHook((void*) getRealOffset(string2Offset(OBFUSCATE(offset))), (void*)newfunc, (void**)&orig)
+#define PATCH(offset, hex) patchOffset(OBFUSCATE("libil2cpp.so"), string2Offset(offset), std::string(OBFUSCATE(hex)), true)
+#define hook(offset, newfunc, orig) DobbyHook((void*) getRealOffset(string2Offset(offset)), (void*)newfunc, (void**)&orig)
 #define hookStatic(offset, ptr) DobbyHook((void *)getRealOffset(string2Offset(OBFUSCATE(offset))), (void *)ptr, nullptr)
 std::string readTextFile(std::string path)
 {

@@ -7,7 +7,9 @@
 #include "nlohmann/json.hpp"
 #include "http/cpr/cpr.h"
 #include "Misc/Logging.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "ImGui/imgui.h"
+#include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_android.h"
 #include "ImGui/imgui_impl_opengl3.h"
 #include "Obfuscation/Obfuscate.h"
@@ -21,20 +23,21 @@
 #include "Misc/FileWrapper.h"
 #include "Misc/Utils.h"
 #include "Unity/Unity.h"
+#include "Unity/Quaternion.h"
 #include "Unity/Vector3.h"
 #include "Unity/Vector2.h"
 #include "Hooking/Hooks.h"
 #include "Misc/FunctionPointers.h"
 #include "Misc/Patches.h"
-#include "Keysystem/Keysystem.h"
 #include "Misc/ImGuiStuff.h"
+#include "Game/Data.hpp"
 #include "Menu.h"
 #include "Misc/JNIHooks.h"
-
 
 #define HOOK(ret, func, ...) \
     ret (*orig##func)(__VA_ARGS__); \
     ret my##func(__VA_ARGS__)
+
 
 HOOK(void, Input, void *thiz, void *ex_ab, void *ex_ac){
     origInput(thiz, ex_ab, ex_ac);
@@ -96,6 +99,8 @@ void *hack_thread(void *)
     {
         DobbyHook(eglSwapBuffers, (void *) hook_eglSwapBuffers, (void **) &old_eglSwapBuffers);
     }
+
+    cops::init();
 
     pthread_exit(nullptr);
 }
