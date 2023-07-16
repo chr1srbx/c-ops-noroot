@@ -66,7 +66,7 @@ EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
     // Rendering
     ImGui::EndFrame();
     ImGui::Render();
-    glViewport(0, 0, 1728 , 972);
+    glViewport(0, 0, (int) glWidth, (int) glHeight);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     return old_eglSwapBuffers(dpy, surface);
 }
