@@ -48,12 +48,14 @@
             float fireRate = 0.f;
             bool wallShot = false;
             bool headRain = false;
-            int hr_old_val = 0.f;
-            bool hr_changed = false;
             bool noAimpunch = false;
             bool noDryfire = false;
             bool magicMelee = false;
             bool instantEquipGun = false;
+            bool noshake = false;
+            bool forcescope = false;
+            bool burstModif = false;
+            int bursts = 0;
         }
 
         namespace visuals {
@@ -71,19 +73,6 @@
             float viewModelX = 0.f;
             float viewModelY = 0.f;
             float viewModelZ = 0.f;
-        }
-
-        namespace miscellaneous {
-            bool speed = false;
-            bool noclip = false;
-            float speedValue = 20.f;
-            bool bombTimer = false;
-            bool jumpHeight = false;
-            float jumpVal = 0.5f;
-            bool botsNoShoot = false;
-            bool fly = false;
-            float flyVal = 0.f;
-            bool skipTut = false;
         }
 
         namespace skin_changer {
@@ -149,4 +138,22 @@
             int uratio_id = 8051;
         }
 
+        namespace character{
+            bool speed = false;
+            bool noclip = false;
+            float speedValue = 20.f;
+            bool jumpHeight = false;
+            float jumpVal = 0.5f;
+            bool fly = false;
+            float flyVal = 0.f;
+            bool noslow = false;
+            bool crouchcheck = false;
+            float crouchspeed = 0;
+        }
+
+        namespace miscellaneous{
+            bool skipTut = false;
+            bool botsNoShoot = false;
+            bool bombTimer = false;
+        }
     }
