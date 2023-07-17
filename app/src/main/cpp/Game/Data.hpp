@@ -1,9 +1,9 @@
 namespace cops {
+#include "Bypass.hpp"
     static bool menuOpen = true;
 #include "structs.h"
 #include "EntityManager.hpp"
     EntityManager* manager;
-
 #include "Configs.hpp"
 #include "Offsets.hpp"
 #include "Pointers.hpp"
@@ -20,6 +20,7 @@ namespace cops {
     void init() {
         manager = new EntityManager();
         menuOpen = true;
+        bypass::init();
         pointers::init();
         hooks::init();
         aimbot::init();
