@@ -1179,24 +1179,24 @@ namespace Menu
                         break;
                     case 5:
                         Test::Checkbox(OBFUSCATE("Speed"),
-                                       &cops::configs::miscellaneous::speed);
+                                       &cops::configs::character::speed);
                         Test::Checkbox(OBFUSCATE("No Clip"),
-                                       &cops::configs::miscellaneous::noclip);
+                                       &cops::configs::character::noclip);
                         Test::SliderFloat(OBFUSCATE("Speed Value"),
-                                          &cops::configs::miscellaneous::speedValue, 0.f,
+                                          &cops::configs::character::speedValue, 0.f,
                                           30.f);
                         Test::Checkbox(OBFUSCATE("Bomb Timer"),
                                        &cops::configs::miscellaneous::bombTimer);
                         Test::Checkbox(OBFUSCATE("Jump Height"),
-                                       &cops::configs::miscellaneous::jumpHeight);
+                                       &cops::configs::character::jumpHeight);
                         Test::SliderFloat(OBFUSCATE("Jump Height Value"),
-                                          &cops::configs::miscellaneous::jumpVal,
+                                          &cops::configs::character::jumpVal,
                                           0.f, 30.f);
                         Test::Checkbox(OBFUSCATE("Bots Don't Shoot"),
                                        &cops::configs::miscellaneous::botsNoShoot);
-                        Test::Checkbox(OBFUSCATE("Fly"), &cops::configs::miscellaneous::fly);
+                        Test::Checkbox(OBFUSCATE("Fly"), &cops::configs::character::fly);
                         Test::SliderFloat(OBFUSCATE("Fly Height"),
-                                          &cops::configs::miscellaneous::flyVal, 1.47f,
+                                          &cops::configs::character::flyVal, 1.47f,
                                           10.f);
                         Test::Checkbox(OBFUSCATE("Skip Tutorial"),
                                        &cops::configs::miscellaneous::skipTut);

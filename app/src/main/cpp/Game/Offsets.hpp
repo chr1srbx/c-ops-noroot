@@ -6,7 +6,7 @@
             auto Destroy = OBFUSCATE("0x1063408");
             auto CreateCharacter = OBFUSCATE("0x1064F14");
             auto DestroyCharacter = OBFUSCATE("0x1067D8C");
-            auto ProcessHitBuffers = OBFUSCATE("0x106B4E0");
+            auto ProcessHitBuffers = OBFUSCATE("0x1067FF4");
         }
 
         namespace character {
